@@ -19,7 +19,7 @@ pipeline {
                 steps {
                     retry(3){
                         withAWS(region:'us-east-2',credentials:'aws-static'){
-                        s3Upload(file:'index.html', bucket:'ahmed-jenkins-pipeline', path:'')
+                        s3Upload(file:'index.html', bucket:'ahmed-jenkins-pipline', path:'')
                     }                             
                 }
             }
