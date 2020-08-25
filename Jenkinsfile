@@ -16,18 +16,13 @@ pipeline {
               }
          }
          stage('Upload to AWS') {
-              steps {
-                  withAWS(region:'us-east-2',credentials:'aws-static') {
-                  sh 'echo "Uploading content with AWS creds"'
-                      s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true, file:'index.html', bucket:'ahmed-jenkins-pipeline')
-                  }
-              }
-         }
-         stage('Security Scan') {
-              steps { 
-                 aquaMicroscanner imageName: 'alpine:latest', notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
-              }
-         }     
-
+                steps {
+                    retry(3){
+                        withAWS(region:'us-east-2',credentials:'aws-static'){
+                        s3Upload(file:'index.html', bucket:'ahmed-jenkins-pipeline', path:'')
+                    }                             
+                }
+            }
+        }
      }
 }
